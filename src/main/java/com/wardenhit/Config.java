@@ -17,6 +17,8 @@ public class Config {
 	public boolean enabled = true;
 	/** Only swing while falling far enough for a mace smash (fall distance > 1.5). */
 	public boolean onlyWhileFalling = true;
+	/** While falling, hold the hit until the Warden is about one tick away so the whole fall counts toward smash damage. */
+	public boolean maxSmashTiming = true;
 	/** Max distance (blocks) from your eyes to the Warden's hitbox. */
 	public double range = 3.0;
 	/** Only swing once the attack cooldown is full (full damage hits). */

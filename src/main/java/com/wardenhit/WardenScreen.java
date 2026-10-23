@@ -22,7 +22,7 @@ public class WardenScreen extends Screen {
 	protected void init() {
 		Config cfg = Config.get();
 		int cx = this.width / 2;
-		int y = this.height / 2 - 68;
+		int y = this.height / 2 - 80;
 
 		addDrawableChild(ButtonWidget.builder(toggleText(), b -> {
 			Config.get().enabled = !Config.get().enabled;
@@ -39,7 +39,12 @@ public class WardenScreen extends Screen {
 			b.setMessage(fallingText());
 		}).dimensions(cx - 100, y + 52, 200, 20).build());
 
-		rangeField = new TextFieldWidget(this.textRenderer, cx + 30, y + 78, 70, 20, Text.literal("Range"));
+		addDrawableChild(ButtonWidget.builder(timingText(), b -> {
+			Config.get().maxSmashTiming = !Config.get().maxSmashTiming;
+			b.setMessage(timingText());
+		}).dimensions(cx - 100, y + 78, 200, 20).build());
+
+		rangeField = new TextFieldWidget(this.textRenderer, cx + 30, y + 104, 70, 20, Text.literal("Range"));
 		rangeField.setTextPredicate(s -> s.matches("\\d{0,1}(\\.\\d{0,2})?"));
 		rangeField.setText(trimNumber(cfg.range));
 		rangeField.setChangedListener(s -> {
@@ -52,7 +57,7 @@ public class WardenScreen extends Screen {
 		addDrawableChild(rangeField);
 
 		addDrawableChild(ButtonWidget.builder(Text.literal("Done"), b -> close())
-				.dimensions(cx - 100, y + 110, 200, 20).build());
+				.dimensions(cx - 100, y + 136, 200, 20).build());
 	}
 
 	private Text toggleText() {
@@ -67,6 +72,10 @@ public class WardenScreen extends Screen {
 		return Text.literal("Only hit while falling (mace): " + (Config.get().onlyWhileFalling ? "ON" : "OFF"));
 	}
 
+	private Text timingText() {
+		return Text.literal("Max smash timing (hit at contact): " + (Config.get().maxSmashTiming ? "ON" : "OFF"));
+	}
+
 	private static String trimNumber(double d) {
 		String s = String.format(Locale.ROOT, "%.2f", d);
 		s = s.replaceAll("0+$", "");
@@ -78,9 +87,9 @@ public class WardenScreen extends Screen {
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 		super.render(context, mouseX, mouseY, delta);
 		int cx = this.width / 2;
-		int y = this.height / 2 - 68;
+		int y = this.height / 2 - 80;
 		context.drawCenteredTextWithShadow(this.textRenderer, this.title, cx, y - 20, 0xFFFFFFFF);
-		context.drawTextWithShadow(this.textRenderer, Text.literal("Range (1-6 blocks)"), cx - 100, y + 84, 0xFFFFFFFF);
+		context.drawTextWithShadow(this.textRenderer, Text.literal("Range (1-6 blocks)"), cx - 100, y + 110, 0xFFFFFFFF);
 	}
 
 	@Override

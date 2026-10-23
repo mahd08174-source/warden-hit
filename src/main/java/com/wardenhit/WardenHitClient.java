@@ -64,7 +64,13 @@ public class WardenHitClient implements ClientModInitializer {
 			return;
 		}
 
-		WardenEntity target = findWarden(client, player, cfg.range);
+		double reach = cfg.range;
+		if (cfg.onlyWhileFalling && cfg.maxSmashTiming) {
+			// Wait until the Warden would be reached next tick, so no fall distance is wasted.
+			reach = Math.min(reach, Math.max(0.75, -player.getVelocity().y));
+		}
+
+		WardenEntity target = findWarden(client, player, reach);
 		if (target == null) {
 			return;
 		}
