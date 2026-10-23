@@ -15,6 +15,8 @@ public class Config {
 
 	/** Master switch for the auto-hit. */
 	public boolean enabled = true;
+	/** Only swing while falling far enough for a mace smash (fall distance > 1.5). */
+	public boolean onlyWhileFalling = true;
 	/** Max distance (blocks) from your eyes to the Warden's hitbox. */
 	public double range = 3.0;
 	/** Only swing once the attack cooldown is full (full damage hits). */

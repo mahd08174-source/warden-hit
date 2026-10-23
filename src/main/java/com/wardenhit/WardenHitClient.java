@@ -60,6 +60,10 @@ public class WardenHitClient implements ClientModInitializer {
 			return;
 		}
 
+		if (cfg.onlyWhileFalling && player.fallDistance <= 1.5) {
+			return;
+		}
+
 		WardenEntity target = findWarden(client, player, cfg.range);
 		if (target == null) {
 			return;
