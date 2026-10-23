@@ -44,6 +44,10 @@ public class WardenHitClient implements ClientModInitializer {
 		}
 
 		Config cfg = Config.get();
+		// Solo worlds only: do nothing on multiplayer servers.
+		if (!client.isInSingleplayer()) {
+			return;
+		}
 		if (!cfg.enabled || client.currentScreen != null) {
 			return;
 		}
