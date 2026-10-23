@@ -18,6 +18,7 @@ import java.util.List;
 
 public class WardenHitClient implements ClientModInitializer {
 	public static KeyBinding menuKey;
+	private static int waited = 0;
 
 	@Override
 	public void onInitializeClient() {
@@ -49,6 +50,7 @@ public class WardenHitClient implements ClientModInitializer {
 			return;
 		}
 		if (!cfg.enabled || client.currentScreen != null) {
+			waited = 0;
 			return;
 		}
 
@@ -57,21 +59,30 @@ public class WardenHitClient implements ClientModInitializer {
 			return;
 		}
 		if (cfg.waitForCooldown && player.getAttackCooldownProgress(0.0f) < 1.0f) {
+			waited = 0;
 			return;
 		}
 
 		if (cfg.onlyWhileFalling && player.fallDistance <= 1.5) {
+			waited = 0;
 			return;
 		}
 
+		boolean preset = cfg.onlyWhileFalling && cfg.hitDelayTicks > 0;
 		double reach = cfg.range;
-		if (cfg.onlyWhileFalling && cfg.maxSmashTiming) {
+		if (cfg.onlyWhileFalling && cfg.maxSmashTiming && !preset) {
 			// Wait until the Warden would be reached next tick, so no fall distance is wasted.
 			reach = Math.min(reach, Math.max(0.75, -player.getVelocity().y));
 		}
 
 		WardenEntity target = findWarden(client, player, reach);
 		if (target == null) {
+			waited = 0;
+			return;
+		}
+
+		// Preset timing: hold the hit for a fixed number of ticks after the Warden comes in range.
+		if (preset && waited++ < cfg.hitDelayTicks) {
 			return;
 		}
 

@@ -22,7 +22,7 @@ public class WardenScreen extends Screen {
 	protected void init() {
 		Config cfg = Config.get();
 		int cx = this.width / 2;
-		int y = this.height / 2 - 80;
+		int y = this.height / 2 - 94;
 
 		addDrawableChild(ButtonWidget.builder(toggleText(), b -> {
 			Config.get().enabled = !Config.get().enabled;
@@ -56,8 +56,20 @@ public class WardenScreen extends Screen {
 		});
 		addDrawableChild(rangeField);
 
+		TextFieldWidget delayField = new TextFieldWidget(this.textRenderer, cx + 30, y + 130, 70, 20, Text.literal("Delay"));
+		delayField.setTextPredicate(s -> s.matches("\\d{0,2}"));
+		delayField.setText(String.valueOf(cfg.hitDelayTicks));
+		delayField.setChangedListener(s -> {
+			try {
+				int v = Integer.parseInt(s);
+				if (v >= 0 && v <= 10) Config.get().hitDelayTicks = v;
+			} catch (NumberFormatException ignored) {
+			}
+		});
+		addDrawableChild(delayField);
+
 		addDrawableChild(ButtonWidget.builder(Text.literal("Done"), b -> close())
-				.dimensions(cx - 100, y + 136, 200, 20).build());
+				.dimensions(cx - 100, y + 162, 200, 20).build());
 	}
 
 	private Text toggleText() {
@@ -87,9 +99,10 @@ public class WardenScreen extends Screen {
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 		super.render(context, mouseX, mouseY, delta);
 		int cx = this.width / 2;
-		int y = this.height / 2 - 80;
+		int y = this.height / 2 - 94;
 		context.drawCenteredTextWithShadow(this.textRenderer, this.title, cx, y - 20, 0xFFFFFFFF);
 		context.drawTextWithShadow(this.textRenderer, Text.literal("Range (1-6 blocks)"), cx - 100, y + 110, 0xFFFFFFFF);
+		context.drawTextWithShadow(this.textRenderer, Text.literal("Hit delay (ticks, 0=auto)"), cx - 100, y + 136, 0xFFFFFFFF);
 	}
 
 	@Override

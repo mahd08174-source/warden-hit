@@ -19,6 +19,8 @@ public class Config {
 	public boolean onlyWhileFalling = true;
 	/** While falling, hold the hit until the Warden is about one tick away so the whole fall counts toward smash damage. */
 	public boolean maxSmashTiming = true;
+	/** Preset delay in ticks (50 ms each) between a Warden coming in range while falling and the hit. 0 = automatic timing. */
+	public int hitDelayTicks = 0;
 	/** Max distance (blocks) from your eyes to the Warden's hitbox. */
 	public double range = 3.0;
 	/** Only swing once the attack cooldown is full (full damage hits). */
@@ -57,5 +59,6 @@ public class Config {
 
 	private void clamp() {
 		range = Math.max(1.0, Math.min(6.0, range));
+		hitDelayTicks = Math.max(0, Math.min(10, hitDelayTicks));
 	}
 }
